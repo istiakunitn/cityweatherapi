@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to right, #56CCF2, #2F80ED);
+            margin: 0;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        input {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            width: 80%;
+            outline: none;
+        }
+        button {
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color: #2F80ED;
+            font-weight: bold;
+            cursor: pointer;
+            width: 85%;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #f1f1f1;
+        }
+        .weather-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+            margin: 10px auto;
+            display: block;
+        }
+        .temperature {
+            font-size: 40px;
+            font-weight: bold;
+        }
+        .details {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌤 Weather Dashboard</h1>
+        <form id="weather-form">
+            <input type="text" id="city" placeholder="Enter city name" required>
+            <button type="submit">Get Weather</button>
+        </form>
+        <div id="weather-result" class="weather-result" style="display: none;"></div>
+    </div>
+    <script>
+        document.getElementById('weather-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const city = document.getElementById('city').value;
+            const response = await fetch(`/api/weather?city=${city}`);
+            const data = await response.json();
+            
+            document.getElementById('weather-result').style.display = 'block';
+            document.getElementById('weather-result').innerHTML = `
+                <h2>${data.name}</h2>
+                <img src="https://openweathermap.org/img/w/${data.weather[0].icon}.png" alt="${data.weather[0].main}" class="weather-icon">
+                <p class="temperature">${data.main.temp} °C</p>
+                <p class="details">Condition: ${data.weather[0].description}</p>
+                <p class="details">Humidity: ${data.main.humidity}%</p>
+                <p class="details">Wind Speed: ${data.wind.speed} m/s</p>
+            `;
+        });
+    </script>
+</body>
+</html>

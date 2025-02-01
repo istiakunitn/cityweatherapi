@@ -7,6 +7,7 @@ import (
 
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
+	r.HandleFunc("/", apis.HomeHandler)
 	r.HandleFunc("/api/weather", apis.WeatherHandler).Methods("GET")
 
 	return r
